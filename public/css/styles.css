@@ -1,0 +1,28 @@
+.navBorder {
+  border-radius: 0px;
+}
+
+.jumbotron {
+  background: linear-gradient(45deg, #4568dc 30%, #b06ab3 90%);
+  border: 0;
+  margin-bottom: 1.2rem;
+  border-radius: 3px;
+  box-shadow: "0 3px 5px 2px rgba(255, 105, 135, .3)";
+  /* height: 60px; */
+  padding: 4rem 2rem;
+}
+
+.navTitle {
+  color: #fff;
+  font-family: "Trebuchet MS";
+  font-weight: 600;
+}
+
+.author {
+  font-weight: 400;
+}
+
+.subTitle {
+  font-size: 18px;
+  color: rgb(224, 224, 224);
+}
