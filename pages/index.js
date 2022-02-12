@@ -1,3 +1,4 @@
+import Link from "next/link";
 const Index = () => {
   return (
     <>
@@ -9,9 +10,12 @@ const Index = () => {
         </p>
         <hr className="my-4" />
         <p className="subTitle">Eliminate the boundaries of the classroom.</p>
-        <a className="btn btn-success btn-lg" href="#" role="button">
-          Sign In
-        </a>
+
+        <Link href="/">
+          <a className="btn btn-success btn-lg" role="button">
+            GuruLevel
+          </a>
+        </Link>
       </div>
     </>
   );
