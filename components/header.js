@@ -7,19 +7,19 @@ const { Item } = Menu;
 const Header = () => {
   return (
     <Menu mode="horizontal">
-      <Item icon={<HomeFilled />}>
+      <Item key={1} icon={<HomeFilled />}>
         <Link href="/">
           <a>GuruLevel</a>
         </Link>
       </Item>
 
-      <Item icon={<LoginOutlined />}>
+      <Item key={2} icon={<LoginOutlined />}>
         <Link href="/login">
           <a>Login</a>
         </Link>
       </Item>
 
-      <Item icon={<UserAddOutlined />}>
+      <Item key={3} icon={<UserAddOutlined />}>
         <Link href="/register">
           <a>Register</a>
         </Link>

@@ -1,34 +1,64 @@
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { SyncOutlined } from "@ant-design/icons";
+import Link from "next/link";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.table({ email, password });
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API}/login`,
+        {
+          email,
+          password,
+        }
+      );
+      // console.log("Response Data", data); // testing
+      toast.success(`We are always happy to see you.`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setLoading(false);
+    } catch (err) {
+      toast.error(err.response.data);
+    }
   };
   return (
     <>
-      <div className="jumbotron text-right navBorder">
-        <h3 className="navTitle">Login</h3>
+      <div className="jumbotron navBorder">
+        <h3 className="navTitle">Sign In</h3>
       </div>
       <div className="container col-md-4 offset-md-4 pb-5">
         <form onSubmit={handleSubmit}>
-          <div class="form-group mb-4">
-            <label for={email}>E-mail</label>
+          <div className="form-group mb-4">
+            <label htmlFor={email}>E-mail</label>
             <input
               type={"email"}
               className="form-control p-3"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               aria-describedby="emailHelp"
-              autoFocus
+              placeholder="e-learner@example.com"
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
           </div>
-          <div class="form-group">
-            <label for={password}>Password</label>
+
+          <div className="form-group">
+            <label htmlFor={password}>Password</label>
             <input
               type={"password"}
               className="form-control mb-4 p-3"
@@ -37,10 +67,20 @@ const Login = () => {
             />
           </div>
 
-          <button className="btn btn-block btn-success p-2" type="submit">
-            Submit
+          <button
+            className="btn btn-success  col-12 p-2"
+            type="submit"
+            disabled={!email || !password || loading}
+          >
+            {loading ? <SyncOutlined spin /> : "Login"}
           </button>
         </form>
+        <p className="lead-2 text-center p-3">
+          Not yet registered?
+          <Link href="/register">
+            <a>Register</a>
+          </Link>
+        </p>
       </div>
     </>
   );
