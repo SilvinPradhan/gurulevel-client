@@ -17,7 +17,7 @@ const Login = () => {
         email,
         password,
       });
-      // console.log("Response Data", data); // testing
+      console.log("Response Data", data); // testing
       toast.success(`We are always happy to see you.`, {
         position: "top-center",
         autoClose: 5000,
