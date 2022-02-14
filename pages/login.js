@@ -13,13 +13,10 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API}/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const { data } = await axios.post(`/api/login`, {
+        email,
+        password,
+      });
       // console.log("Response Data", data); // testing
       toast.success(`We are always happy to see you.`, {
         position: "top-center",
