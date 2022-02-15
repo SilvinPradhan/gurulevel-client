@@ -38,7 +38,7 @@ const Register = () => {
     <>
       <div className="jumbotron text-right navBorder">
         <h3 className="navTitle">Sign Up</h3>
-        <p className="lead">Learn to your potential!</p>
+        <p className="lead">Unleash your potential!</p>
       </div>
       <div className="container col-md-4 offset-md-4 pb-5">
         <form onSubmit={handleSubmit}>
