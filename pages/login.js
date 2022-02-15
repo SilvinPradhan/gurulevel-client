@@ -48,6 +48,9 @@ const Login = () => {
     <>
       <div className="jumbotron navBorder">
         <h3 className="navTitle">Sign In</h3>
+        <p className="lead">
+          Start Learning to your <span className="author">potential.</span>
+        </p>
       </div>
       <div className="container col-md-4 offset-md-4 pb-5">
         <form onSubmit={handleSubmit}>
