@@ -7,13 +7,14 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   UnorderedListOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Context } from "../context";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
-const { Item, SubMenu } = Menu;
+const { Item, SubMenu, ItemGroup } = Menu;
 
 const Header = () => {
   const [current, setCurrent] = useState("");
@@ -73,14 +74,25 @@ const Header = () => {
           title={user && user.name}
           style={{ marginLeft: "auto" }}
         >
-          <Item
-            style={{ marginLeft: "auto" }}
-            key="/logout"
-            onClick={logout}
-            icon={<LogoutOutlined />}
-          >
-            <a>Logout</a>
-          </Item>
+          <ItemGroup>
+            <Item
+              style={{ marginLeft: "auto" }}
+              key="/user"
+              icon={<UserOutlined />}
+            >
+              <Link href="/user">
+                <a>Dashboard</a>
+              </Link>
+            </Item>
+            <Item
+              style={{ marginLeft: "auto" }}
+              key="/logout"
+              onClick={logout}
+              icon={<LogoutOutlined />}
+            >
+              <a>Logout</a>
+            </Item>
+          </ItemGroup>
         </SubMenu>
       )}
     </Menu>
