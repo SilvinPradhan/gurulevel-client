@@ -30,8 +30,7 @@ const Register = () => {
         email,
         password,
       });
-      // console.log("Response Data", data); // testing
-      toast.success(`Welcome to Gurulevel, ${name}`, {
+      toast.success(`Welcome to Gurulevel, ${name}. Procees to login.`, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -41,6 +40,9 @@ const Register = () => {
         progress: undefined,
       });
       setLoading(false);
+      setName("");
+      setEmail("");
+      setPassword("");
     } catch (err) {
       toast.error(err.response.data);
     }
@@ -49,7 +51,9 @@ const Register = () => {
     <>
       <div className="jumbotron text-right navBorder">
         <h3 className="navTitle">Sign Up</h3>
-        <p className="lead">Unleash your potential!</p>
+        <p className="lead">
+          Unleash your <span className="author">potential!</span>
+        </p>
       </div>
       <div className="container col-md-4 offset-md-4 pb-5">
         <form onSubmit={handleSubmit}>
@@ -91,7 +95,7 @@ const Register = () => {
           </div>
 
           <button
-            className="btn btn-success p-2"
+            className="btn btn-success col-12 p-2"
             type="submit"
             disabled={!name || !email || !password || loading}
           >

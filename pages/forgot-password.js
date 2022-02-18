@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SyncOutlined } from "@ant-design/icons";
-import Link from "next/link";
 import { Context } from "../context";
 import { useRouter } from "next/router";
 
@@ -38,8 +37,6 @@ const ForgotPassword = () => {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
-    console.log(email, code, newPassword);
-    return;
     try {
       setLoading(true);
       const { data } = await axios.post("/api/reset-password", {
@@ -50,6 +47,8 @@ const ForgotPassword = () => {
       setEmail("");
       setCode("");
       setNewPassword("");
+      setLoading(false);
+      toast.success("Password Successfully Changed!");
     } catch (err) {
       setLoading(false);
       console.log(err);
