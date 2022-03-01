@@ -19,7 +19,7 @@ const ForgotPassword = () => {
   const router = useRouter();
   useEffect(() => {
     if (user !== null) router.push("/");
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

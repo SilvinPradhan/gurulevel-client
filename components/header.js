@@ -8,6 +8,8 @@ import {
   LogoutOutlined,
   UnorderedListOutlined,
   UserOutlined,
+  CarryOutFilled,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Context } from "../context";
 import axios from "axios";
@@ -42,6 +44,28 @@ const Header = () => {
           <a>GuruLevel</a>
         </Link>
       </Item>
+
+      {user && user.role && user.role.includes("Instructor") ? (
+        <Item
+          key={`/instructor/course/create`}
+          onClick={(e) => setCurrent(e.key)}
+          icon={<CarryOutFilled />}
+        >
+          <Link href={`/instructor/course/create`}>
+            <a>Create Course</a>
+          </Link>
+        </Item>
+      ) : (
+        <Item
+          key={`/user/upgrade-to-instructor`}
+          onClick={(e) => setCurrent(e.key)}
+          icon={<TeamOutlined />}
+        >
+          <Link href={`/user/upgrade-to-instructor`}>
+            <a>Become an Instructor</a>
+          </Link>
+        </Item>
+      )}
 
       {user === null && (
         <>

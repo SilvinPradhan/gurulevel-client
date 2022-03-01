@@ -30,6 +30,7 @@ const Register = () => {
         email,
         password,
       });
+      console.log({ name, email, password });
       toast.success(`Welcome to Gurulevel, ${name}. Procees to login.`, {
         position: "top-center",
         autoClose: 5000,

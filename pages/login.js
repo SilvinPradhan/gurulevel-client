@@ -36,7 +36,7 @@ const Login = () => {
         payload: data,
       });
       window.localStorage.setItem("user", JSON.stringify(data));
-      router.push("/");
+      router.push("/user");
       toast.success(`We are always happy to see you.`, {
         position: "top-center",
         autoClose: 5000,
