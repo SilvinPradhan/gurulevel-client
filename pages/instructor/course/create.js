@@ -1,11 +1,13 @@
 import React from "react";
-import axios from "axios";
+import InstructorRoute from "../../../components/routes/InstructorRoute";
 
 const CreateCourse = () => {
   return (
-    <div className="jumbotron text-center">
-      <h3 className="navTitle">Create Course</h3>
-    </div>
+    <InstructorRoute>
+      <div className="jumbotron text-center">
+        <h3 className="navTitle">Create Course</h3>
+      </div>
+    </InstructorRoute>
   );
 };
 
