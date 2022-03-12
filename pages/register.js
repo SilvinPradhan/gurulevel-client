@@ -31,6 +31,7 @@ const Register = () => {
         password,
       });
       console.log({ name, email, password });
+      router.push("/login");
       toast.success(`Welcome to Gurulevel, ${name}. Procees to login.`, {
         position: "top-center",
         autoClose: 5000,
