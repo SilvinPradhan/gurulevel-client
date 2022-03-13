@@ -3,6 +3,10 @@ import React, { useState, useEffect } from "react";
 import InstructorRoute from "../../../components/routes/InstructorRoute";
 import CreateCourseForm from "../../../components/forms/CreateCourseForm";
 
+import Resizer from "react-image-file-resizer";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 const CreateCourse = () => {
   const [values, setValues] = useState({
     name: "",
@@ -14,16 +18,36 @@ const CreateCourse = () => {
     loading: false,
     imagePreview: "",
   });
+  const [image, setImage] = useState("");
+  const [preview, setPreview] = useState("");
+  const [uploadButtonText, setUploadButtonText] = useState("Choose Image");
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: [e.target.value] });
   };
   const handleImage = (e) => {
-    e.preventDefault();
-    console.log(values);
+    let file = e.target.files[0];
+    setPreview(window.URL.createObjectURL(file));
+    setUploadButtonText(file.name);
+    setValues({ ...values, loading: true });
+
+    Resizer.imageFileResizer(file, 720, 500, "JPEG", 100, 0, async (uri) => {
+      try {
+        let { data } = await axios.post("/api/course/upload-image", {
+          image: uri,
+        });
+        console.log("Image uploaded", data);
+        // set image in the state, set loading to false
+        setValues({ ...values, loading: false });
+      } catch (err) {
+        console.log(err);
+        setValues({ ...values, loading: false });
+        toast("Image upload failed. Try again!");
+        // TransformStream("Image upload failed. Try later.");
+      }
+    });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.table(values);
   };
 
   return (
@@ -38,6 +62,8 @@ const CreateCourse = () => {
           handleImage={handleImage}
           values={values}
           setValues={setValues}
+          preview={preview}
+          uploadButtonText={uploadButtonText}
         />
       </div>
       <pre>{JSON.stringify(values, null, 4)}</pre>

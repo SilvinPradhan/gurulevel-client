@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, Button } from "antd";
+import { Select, Button, Avatar } from "antd";
 const { Option } = Select;
 
 const CreateCourseForm = ({
@@ -8,6 +8,8 @@ const CreateCourseForm = ({
   handleSubmit,
   values,
   setValues,
+  preview,
+  uploadButtonText,
 }) => {
   const children = [];
   for (let i = 9.99; i <= 100.99; i++) {
@@ -80,20 +82,29 @@ const CreateCourseForm = ({
         ></input>
       </div>
 
-      <div className="form-row pb-3">
-        <div className="col">
-          <div className="form-group">
-            <label className="btn btn-outline-primary text-left">
-              {values.loading ? "Uploading..." : "Select an Image to upload"}
-              <input
-                type="file"
-                name="image"
-                onChange={handleImage}
-                accept="image/*"
-                hidden
-              />
-            </label>
+      <div className="form-row pb-3 justify-content-center">
+        <div className="row">
+          <div className="col-md-4">
+            <div className="form-group">
+              <label className="btn btn-outline-primary text-left">
+                {uploadButtonText}
+                <input
+                  type="file"
+                  name="image"
+                  onChange={handleImage}
+                  accept="image/*"
+                  hidden
+                />
+              </label>
+            </div>
           </div>
+          {preview && (
+            <div className="col-md-8">
+              <div className="form-group">
+                <Avatar width={200} src={preview} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="row pb-3">
