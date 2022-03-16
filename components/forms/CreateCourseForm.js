@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, Button, Avatar } from "antd";
+import { Select, Button, Avatar, Badge } from "antd";
 const { Option } = Select;
 
 const CreateCourseForm = ({
@@ -10,6 +10,7 @@ const CreateCourseForm = ({
   setValues,
   preview,
   uploadButtonText,
+  handleImageRemove,
 }) => {
   const children = [];
   for (let i = 9.99; i <= 100.99; i++) {
@@ -101,7 +102,13 @@ const CreateCourseForm = ({
           {preview && (
             <div className="col-md-8">
               <div className="form-group">
-                <Avatar width={200} src={preview} />
+                <Badge
+                  count="X"
+                  onClick={handleImageRemove}
+                  style={{ cursor: "pointer" }}
+                >
+                  <Avatar width={200} src={preview} />
+                </Badge>
               </div>
             </div>
           )}
