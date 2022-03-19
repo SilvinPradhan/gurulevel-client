@@ -34,9 +34,22 @@ const CreateCourse = () => {
 
     Resizer.imageFileResizer(file, 720, 500, "JPEG", 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post("/api/course/upload-image", {
-          image: uri,
-        });
+        let { data } = await axios
+          .post("/api/course/upload-image", {
+            image: uri,
+          })
+          .catch(function (error) {
+            if (error.response) {
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              console.log(error.request);
+            } else {
+              console.log("Error", error.message);
+            }
+            console.log(error.config);
+          });
         console.log("Image uploaded", data);
         // set image in the state, set loading to false
         setImage(data);
@@ -54,7 +67,20 @@ const CreateCourse = () => {
     // console.log("REMOVED IMAGE");
     try {
       setValues({ ...values, loading: true });
-      const res = await axios.post("/api/course/remove-image", { image });
+      const res = await axios
+        .post("/api/course/remove-image", { image })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
       setImage({});
       setPreview("");
       setUploadButtonText("Upload Image");
@@ -69,10 +95,23 @@ const CreateCourse = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/course", {
-        ...values,
-        image,
-      });
+      const { data } = await axios
+        .post("/api/course", {
+          ...values,
+          image,
+        })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
       console.log(data);
       toast("Successfully Added the course. Now start adding lessons!");
       router.push("/instructor");
@@ -99,9 +138,9 @@ const CreateCourse = () => {
           uploadButtonText={uploadButtonText}
         />
       </div>
-      <pre>{JSON.stringify(values, null, 4)}</pre>
+      {/* <pre>{JSON.stringify(values, null, 4)}</pre>
       <hr />
-      <pre>{JSON.stringify(image, null, 4)}</pre>
+      <pre>{JSON.stringify(image, null, 4)}</pre> */}
     </InstructorRoute>
   );
 };
