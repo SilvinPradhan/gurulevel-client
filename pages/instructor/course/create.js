@@ -7,6 +7,7 @@ import Resizer from "react-image-file-resizer";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { Button, Modal, Tooltip } from "antd";
 
 const CreateCourse = () => {
   const router = useRouter();
@@ -23,6 +24,11 @@ const CreateCourse = () => {
   const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
   const [uploadButtonText, setUploadButtonText] = useState("Choose Image");
+  const [modalValues, setModalValues] = useState({
+    spin: false,
+    visible: false,
+  });
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -121,10 +127,48 @@ const CreateCourse = () => {
     }
   };
 
+  // modal
+  const displayModal = () => {
+    setModalValues({
+      ...modalValues,
+      visible: true,
+    });
+  };
+
+  const handleOk = () => {
+    setModalValues({ ...modalValues, visible: false });
+  };
+
+  const handleCancel = () => {
+    setModalValues({ ...modalValues, visible: false });
+  };
+
+  const { visible } = modalValues;
   return (
     <InstructorRoute>
       <div className="jumbotron text-center">
         <h3 className="navTitle">Create Course</h3>
+      </div>
+      <div
+        className="d-flex justify-content-center"
+        style={{ marginTop: "-14px", marginBottom: "7px" }}
+      >
+        <Tooltip title="Follow this Markdown">
+          <Button type="primary" onClick={displayModal}>
+            Open Markdown
+          </Button>
+        </Tooltip>
+        <Modal
+          title="Markdown for Description"
+          visible={visible}
+          centered
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={1000}
+        >
+          <p>Overview to Markdown</p>
+          <span>usage, examples, links, snippets, and more.</span>
+        </Modal>
       </div>
       <div style={{ width: "70%", margin: "0 auto", position: "relative" }}>
         <CreateCourseForm
@@ -138,9 +182,6 @@ const CreateCourse = () => {
           uploadButtonText={uploadButtonText}
         />
       </div>
-      {/* <pre>{JSON.stringify(values, null, 4)}</pre>
-      <hr />
-      <pre>{JSON.stringify(image, null, 4)}</pre> */}
     </InstructorRoute>
   );
 };
