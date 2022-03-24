@@ -26,3 +26,8 @@
   font-size: 18px;
   color: rgb(224, 224, 224);
 }
+
+.modalColor {
+  background: linear-gradient(to top, #6666ff 0%, #3366ff 100%);
+  color: white;
+}

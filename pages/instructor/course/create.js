@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import axios from "axios";
+import { Card, Col, Row } from "antd";
 import InstructorRoute from "../../../components/routes/InstructorRoute";
 import CreateCourseForm from "../../../components/forms/CreateCourseForm";
 
@@ -154,7 +155,7 @@ const CreateCourse = () => {
         style={{ marginTop: "-14px", marginBottom: "7px" }}
       >
         <Tooltip title="Follow this Markdown">
-          <Button type="primary" onClick={displayModal}>
+          <Button className="modalColor" onClick={displayModal}>
             Open Markdown
           </Button>
         </Tooltip>
@@ -166,8 +167,115 @@ const CreateCourse = () => {
           onCancel={handleCancel}
           width={1000}
         >
-          <p>Overview to Markdown</p>
+          <h5>Overview to Markdown</h5>
           <span>usage, examples, links, snippets, and more.</span>
+          <div className="site-card-wrapper container-fluid">
+            <Row gutter={16}>
+              <Col span={8}>
+                <Card title="Header" bordered={true}>
+                  <div className="container row">
+                    <ul style={{ textDecoration: "none" }}>
+                      <li># h1</li>
+                      <li>## h2</li>
+                      <li>### h3</li>
+                      <li>#### h4</li>
+                      <li>##### h5</li>
+                      <li>###### h6</li>
+                    </ul>
+                    <hr />
+                    <p>Header 1</p>
+                    <span>========</span>
+                    <hr />
+                    <p>Header 2</p>
+                    <span>- - - - - - - -</span>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card title="Emphasis" bordered={true}>
+                  <p>*italic*</p>
+                  <p>_italic_</p>
+                  <hr />
+                  <p>**italic**</p>
+                  <p>__bold__</p>
+                  <hr />
+                  <p>***bold italic***</p>
+                  <p>___bold italic___</p>
+                  <hr />
+                  <p>~~strikethrough~~</p>
+                  <hr />
+                  <p className="text-primary">`code`</p>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card title="Lists" bordered={true}>
+                  <p>* Item 1</p>
+                  <p>* Item 2</p>
+                  <hr />
+                  <p>- Item 1</p>
+                  <p>- Item 2</p>
+                  <hr />
+                  <p>- [ ] Checkbox off</p>
+                  <p>- [x] Checkbox on</p>
+                  <hr />
+                  <p>1. Item 1</p>
+                  <p>2. Item 2</p>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card title="Images" bordered={true}>
+                  <p>![Image alt text](/path/to/img.jpg)</p>
+                  <p>![Image alt text](/path/to/img.jpg "title")</p>
+                  <p>![Image alt text][img]</p>
+                  <hr />
+                  <p>[img]: http://foo.com/img.jpg</p>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card title="Code" bordered={true}>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp; 4 space indent</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp; makes a code block</p>
+                  <hr />
+                  <p>
+                    ```
+                    <br />
+                    code fences
+                    <br />
+                    ```
+                  </p>
+                  <hr />
+                  <p>
+                    ```js
+                    <br />
+                    codeFences.withLanguage()
+                    <br />
+                    ```
+                  </p>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card title="Links" bordered={true}>
+                  <p>[link](http://google.com)</p>
+                  <hr />
+                  <p>
+                    [link][google] <br />
+                    [google]: http://google.com
+                  </p>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card title="Blockqoutes" bordered={true}>
+                  <p>
+                    &gt; This is
+                    <br /> &gt; a blockquote <br />
+                    &gt; <br />
+                    &gt; &gt; Nested
+                    <br /> &gt; &gt; Blockquote
+                  </p>
+                </Card>
+              </Col>
+            </Row>
+          </div>
         </Modal>
       </div>
       <div style={{ width: "70%", margin: "0 auto", position: "relative" }}>
