@@ -5,12 +5,23 @@ import axios from "axios";
 import { Button, Image, Modal, Tooltip } from "antd";
 import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
+import AddLessonForm from "../../../../components/forms/AddLessonForm";
+import { toast } from "react-toastify";
 
 const CourseView = () => {
   const [course, setCourse] = useState({});
 
   // lessons - Modal
   const [visible, setVisible] = useState(false);
+  const [values, setValues] = useState({
+    title: "",
+    content: "",
+    video: "",
+  });
+  const [uploading, setUploading] = useState(false);
+  const [uploadButtonText, setUploadButtonText] = useState("Upload Video");
+  // track progress
+  const [progress, setProgress] = useState(0);
 
   const router = useRouter();
   const { slug } = router.query;
@@ -21,6 +32,40 @@ const CourseView = () => {
     const { data } = await axios.get(`/api/course/${slug}`);
     setCourse(data);
   };
+
+  // Add Lesson functions
+  const handleAddLesson = (e) => {
+    e.preventDefault();
+    console.log(values);
+  };
+
+  const handleVideo = async (e) => {
+    try {
+      const file = e.target.files[0];
+      setUploadButtonText(file.name);
+      setUploading(true);
+
+      const videoData = new FormData();
+      videoData.append("video", file);
+      // save progress bar and send video as form data to backend
+      const { data } = await axios.post("/api/course/video-upload", videoData, {
+        onUploadProgress: (e) => {
+          setProgress(Math.round((100 * e.loaded) / e.total));
+        },
+      });
+      // once reponse is received
+      console.log(data);
+      setValues({ ...values, video: data });
+      setUploading(false);
+    } catch (err) {
+      console.log(err);
+      setUploading(false);
+      toast("Video Lesson could not be uploaded.");
+    }
+
+    // console.log("video upload handled");
+  };
+
   return (
     <InstructorRoute>
       <div className="container-fluid pt-3">
@@ -96,7 +141,14 @@ const CourseView = () => {
               onCancel={() => setVisible(false)}
               footer={null}
             >
-              Add lesson component goes here
+              <AddLessonForm
+                values={values}
+                setValues={setValues}
+                handleAddLesson={handleAddLesson}
+                uploading={uploading}
+                uploadButtonText={uploadButtonText}
+                handleVideo={handleVideo}
+              />
             </Modal>
           </div>
         )}
