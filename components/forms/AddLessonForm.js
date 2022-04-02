@@ -1,5 +1,7 @@
 import TextArea from "antd/lib/input/TextArea";
 import React from "react";
+import { Progress, Tooltip } from "antd";
+import { CloseCircleFilled } from "@ant-design/icons";
 
 const AddLessonForm = ({
   values,
@@ -8,6 +10,8 @@ const AddLessonForm = ({
   handleAddLesson,
   uploadButtonText,
   handleVideo,
+  progress,
+  handleVideoRemoval,
 }) => {
   return (
     <div className="container pt-3">
@@ -29,15 +33,36 @@ const AddLessonForm = ({
           values={values.content}
           placeholder="Content"
         />
-        <div className="d-flex justify-content-between pt-2">
-          <label className="btn btn-dark btn-block text-left mt-3">
-            {uploadButtonText}
-            <input onChange={handleVideo} type="file" accept="video/*" hidden />
-          </label>
+        <div
+          className="pt-2"
+          style={{ textAlign: "center", justifyContent: "center" }}
+        >
+          <div>
+            <label className="btn btn-dark btn-block text-left mt-3">
+              {uploadButtonText}
+              <input
+                onChange={handleVideo}
+                type="file"
+                accept="video/*"
+                hidden
+              />
+            </label>
+            {!uploading && values.video.Location && (
+              <Tooltip title="Remove">
+                <span onClick={handleVideoRemoval} className="pt-1 pl-3">
+                  <CloseCircleFilled className="text-danger pt-4 pointer" />
+                </span>
+              </Tooltip>
+            )}
+          </div>
+          {progress > 0 && (
+            <Progress className="pt-2" percent={progress} steps={10} />
+          )}
+          <br />
           <button
             onClick={handleAddLesson}
             style={{ maxWidth: "40%" }}
-            className="btn btn-block col mt-3 modalColor"
+            className="btn btn-block col mt-2 modalColor"
             loading={uploading}
           >
             Save
