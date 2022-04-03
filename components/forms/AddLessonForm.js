@@ -32,6 +32,7 @@ const AddLessonForm = ({
           onChange={(e) => setValues({ ...values, content: e.target.value })}
           values={values.content}
           placeholder="Content"
+          required
         />
         <div
           className="pt-2"
@@ -45,6 +46,7 @@ const AddLessonForm = ({
                 type="file"
                 accept="video/*"
                 hidden
+                required
               />
             </label>
             {!uploading && values.video.Location && (
@@ -63,7 +65,6 @@ const AddLessonForm = ({
             onClick={handleAddLesson}
             style={{ maxWidth: "40%" }}
             className="btn btn-block col mt-2 modalColor"
-            loading={uploading}
           >
             Save
           </button>

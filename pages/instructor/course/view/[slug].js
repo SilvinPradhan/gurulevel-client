@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import axios from "axios";
-import { Button, Image, Modal, Tooltip } from "antd";
+import { Button, Image, Modal, Tooltip, List, Avatar } from "antd";
 import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
 import { toast } from "react-toastify";
+import Item from "antd/lib/list/Item";
 
 const CourseView = () => {
   const [course, setCourse] = useState({});
@@ -34,9 +35,23 @@ const CourseView = () => {
   };
 
   // Add Lesson functions
-  const handleAddLesson = (e) => {
+  const handleAddLesson = async (e) => {
     e.preventDefault();
-    console.log(values);
+    // console.log(values);
+    try {
+      const { data } = await axios.post(
+        `/api/course/lesson/${slug}/${course.instructor._id}`,
+        values
+      );
+      setValues({ ...values, title: "", content: "", video: {} });
+      setVisible(false);
+      setUploadButtonText("Upload a Video");
+      setCourse(data);
+      toast("Lesson added successfully!");
+    } catch (err) {
+      console.log(err);
+      toast("Lesson could not be added!");
+    }
   };
 
   const handleVideo = async (e) => {
@@ -48,13 +63,17 @@ const CourseView = () => {
       const videoData = new FormData();
       videoData.append("video", file);
       // save progress bar and send video as form data to backend
-      const { data } = await axios.post("/api/course/video-upload", videoData, {
-        onUploadProgress: (e) => {
-          setProgress(Math.round((100 * e.loaded) / e.total));
-        },
-      });
-      // once reponse is received
-      console.log(data);
+      const { data } = await axios.post(
+        `/api/course/video-upload/${course.instructor._id}`,
+        videoData,
+        {
+          onUploadProgress: (e) => {
+            setProgress(Math.round((100 * e.loaded) / e.total));
+          },
+        }
+      );
+      // once response is received
+      // console.log(data);
       setValues({ ...values, video: data });
       setUploading(false);
     } catch (err) {
@@ -72,7 +91,7 @@ const CourseView = () => {
       setUploading(true);
       // video: values.video
       const { data } = await axios.post(
-        "/api/course/video-remove",
+        `/api/course/video-remove/${course.instructor._id}`,
         values.video
       );
       console.log(data);
@@ -173,6 +192,25 @@ const CourseView = () => {
                 handleVideoRemoval={handleVideoRemoval}
               />
             </Modal>
+            <div className="row pb-5">
+              <div className="col lesson-list">
+                <h4>
+                  {course && course.lessons && course.lessons.length} Lessons
+                </h4>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={course && course.lessons}
+                  renderItem={(item, index) => (
+                    <Item>
+                      <Item.Meta
+                        avatar={<Avatar>{index + 1}</Avatar>}
+                        title={item.title}
+                      ></Item.Meta>
+                    </Item>
+                  )}
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>
