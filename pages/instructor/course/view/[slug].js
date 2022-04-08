@@ -149,7 +149,12 @@ const CourseView = () => {
               </div>
               <div>
                 <Tooltip title="Edit" className="px-2">
-                  <EditOutlined className="h5 pointer text-warning mr-4" />
+                  <EditOutlined
+                    className="h5 pointer text-warning mr-4"
+                    onClick={() =>
+                      router.push(`/instructor/course/edit/${slug}`)
+                    }
+                  />
                 </Tooltip>
                 <Tooltip title="Publish" className="px-2">
                   <CheckOutlined className="h5 pointer text-danger mr-4" />
@@ -195,7 +200,9 @@ const CourseView = () => {
             <div className="row pb-5">
               <div className="col lesson-list">
                 <h4>
-                  {course && course.lessons && course.lessons.length} Lessons
+                  {course && course.lessons && course.lessons.length
+                    ? course.lessons.length + "Lessons"
+                    : "Start adding lessons..."}
                 </h4>
                 <List
                   itemLayout="horizontal"
