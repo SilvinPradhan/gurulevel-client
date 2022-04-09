@@ -44,8 +44,7 @@ const InstructorIndex = () => {
                 className="align-self-start mr-3"
                 alt="Course Image"
                 shape="square"
-                key={index}
-                size={120}
+                size={130}
                 src={course.image ? course.image.Location : "/course.png"}
               />
               <div className="px-5">
@@ -68,13 +67,8 @@ const InstructorIndex = () => {
                   </h6>
                 ) : course.published ? (
                   <p style={myStyle}>
-                    <Tooltip title="Course is Live" color={"red"} key={index}>
-                      <Badge
-                        status="processing"
-                        color="#f50"
-                        text="#f50"
-                        key={index}
-                      />
+                    <Tooltip title="Course is Live" color={"red"}>
+                      <Badge status="processing" color="#f50" text="#f50" />
                     </Tooltip>
                   </p>
                 ) : (

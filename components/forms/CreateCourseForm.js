@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Select, Button, Avatar, Badge } from "antd";
 const { Option } = Select;
 

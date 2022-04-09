@@ -7,6 +7,9 @@ import Resizer from "react-image-file-resizer";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { Avatar, List } from "antd";
+
+const { Item } = List;
 
 const EditForm = () => {
   const router = useRouter();
@@ -19,6 +22,7 @@ const EditForm = () => {
     paid: true,
     loading: false,
     imagePreview: "",
+    lessons: [],
   });
   const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
@@ -28,11 +32,12 @@ const EditForm = () => {
 
   useEffect(() => {
     loadCourse();
-  }, []);
+  }, [slug]);
 
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/course/${slug}`);
-    setValues(data);
+    if (data) setValues(data);
+    if (data && data.image) setImage(data.image);
   };
 
   const handleChange = (e) => {
@@ -108,7 +113,7 @@ const EditForm = () => {
     e.preventDefault();
     try {
       const { data } = await axios
-        .put("/api/course", {
+        .put(`/api/course/${slug}`, {
           ...values,
           image,
         })
@@ -131,6 +136,30 @@ const EditForm = () => {
       toast(err.response.data);
     }
   };
+  const handleDrag = (e, index) => {
+    // console.log("ON drop", index);
+    e.dataTransfer.setData("itemIndex", index);
+  };
+  const handleDrop = async (e, index) => {
+    // console.log("ON deag", index);
+    const movingItemIndex = e.dataTransfer.getData("itemIndex");
+    const targetItemIndex = index;
+
+    let allLessons = values.lessons;
+
+    let movingItem = allLessons[movingItemIndex];
+    allLessons.splice(movingItemIndex, 1);
+    allLessons.splice(targetItemIndex, 0, movingItem);
+    setValues({ ...values, lessons: [...allLessons] });
+
+    // save new lessons  order in database
+    const { data } = await axios.put(`/api/course/${slug}`, {
+      ...values,
+      image,
+    });
+    console.log("Lessons rearranged => ", data.lessons);
+    toast("Lessons re-arranged successfully!");
+  };
 
   return (
     <InstructorRoute>
@@ -149,6 +178,33 @@ const EditForm = () => {
           uploadButtonText={uploadButtonText}
           editPage={true}
         />
+      </div>
+      <hr />
+      <div className="row pb-5">
+        <div className="col lesson-list">
+          <h4>
+            {values && values.lessons && values.lessons.length
+              ? values.lessons.length + "Lessons"
+              : "First create lessons to edit."}
+          </h4>
+          <List
+            onDragOver={(e) => e.preventDefault()}
+            itemLayout="horizontal"
+            dataSource={values && values.lessons}
+            renderItem={(item, index) => (
+              <Item
+                draggable
+                onDragStart={(e) => handleDrag(e, index)}
+                onDrop={(e) => handleDrop(e, index)}
+              >
+                <Item.Meta
+                  avatar={<Avatar>{index + 1}</Avatar>}
+                  title={item.title}
+                ></Item.Meta>
+              </Item>
+            )}
+          />
+        </div>
       </div>
     </InstructorRoute>
   );
