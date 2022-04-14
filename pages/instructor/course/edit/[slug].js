@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { Avatar, List, Modal, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
+import UpdateLessonForm from "../../../../components/forms/UpdateLessonForm";
+
 const { Item } = List;
 
 const EditForm = () => {
@@ -28,6 +30,13 @@ const EditForm = () => {
   const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
   const [uploadButtonText, setUploadButtonText] = useState("Choose Image");
+  // state for lesson update
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState({});
+  const [uploadVideoButtonText, setUploadVideoButtonText] =
+    useState("Upload Video");
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   const { slug } = router.query;
 
@@ -174,6 +183,59 @@ const EditForm = () => {
     console.log("lesson deleted", data);
   };
 
+  // lesson update functions
+  const handleVideo = async (e) => {
+    console.log("handle video");
+    // remove previous video
+    if (current.video && current.video.Location) {
+      const removeLessonVideo = await axios.post(
+        `/api/course/video-remove/${values.instructor._id}`,
+        current.video
+      );
+      console.log("Removed ==>", removeLessonVideo);
+    }
+    // finally upload update video
+    const file = e.target.files[0];
+    setUploadVideoButtonText(file.name);
+    setUploading(true);
+
+    // send video form data
+    const videoData = new FormData();
+    videoData.append("video", file);
+    videoData.append("courseId", values._id);
+    // save progress bar and send video as form data to backend
+    const { data } = await axios.post(
+      `/api/course/video-upload/${values.instructor._id}`,
+      videoData,
+      {
+        onUploadProgress: (e) =>
+          setProgress(Math.round((100 * e.loaded) / e.total)),
+      }
+    );
+    console.log(data);
+    setCurrent({ ...current, video: data });
+    setUploading(false);
+    setProgress(0);
+  };
+  const handleUpdateLesson = async (e) => {
+    console.log("handle update lesson");
+    e.preventDefault();
+    const { data } = await axios.put(
+      `/api/course/lesson/${slug}/${current._id}`,
+      current
+    );
+    setUploadVideoButtonText("Upload Video");
+    setVisible(false);
+    // update UI
+    if (data.ok) {
+      let arr = values.lessons;
+      const index = arr.findIndex((el) => el._id === current._id);
+      arr[index] = current;
+      setValues({ ...values, lessons: arr });
+      toast("Lesson has been successfully updated!");
+    }
+  };
+
   return (
     <InstructorRoute>
       <div className="jumbotron text-center">
@@ -197,7 +259,7 @@ const EditForm = () => {
         <div className="col lesson-list">
           <h4>
             {values && values.lessons && values.lessons.length
-              ? values.lessons.length + "Lessons"
+              ? values.lessons.length + " Lessons"
               : "First create lessons to edit."}
           </h4>
           <List
@@ -213,6 +275,10 @@ const EditForm = () => {
                 <Item.Meta
                   avatar={<Avatar>{index + 1}</Avatar>}
                   title={item.title}
+                  onClick={() => {
+                    setVisible(true);
+                    setCurrent(item);
+                  }}
                 ></Item.Meta>
                 <DeleteOutlined
                   onClick={() => handleDelete(index)}
@@ -223,6 +289,23 @@ const EditForm = () => {
           />
         </div>
       </div>
+      <Modal
+        title="Update Lesson"
+        centered
+        visible={visible}
+        onCancel={() => setVisible(false)}
+        footer={null}
+      >
+        <UpdateLessonForm
+          current={current}
+          setCurrent={setCurrent}
+          handleVideo={handleVideo}
+          handleUpdateLesson={handleUpdateLesson}
+          uploadVideoButtonText={uploadVideoButtonText}
+          progress={progress}
+          uploading={uploading}
+        />
+      </Modal>
     </InstructorRoute>
   );
 };

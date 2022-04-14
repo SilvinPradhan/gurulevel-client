@@ -20,7 +20,7 @@ const AddLessonForm = ({
           type={"text"}
           className="form-control square"
           onChange={(e) => setValues({ ...values, title: e.target.value })}
-          values={values.title}
+          value={values.title}
           placeholder="Title"
           autoFocus
           required
@@ -30,7 +30,7 @@ const AddLessonForm = ({
           cols={7}
           rows={7}
           onChange={(e) => setValues({ ...values, content: e.target.value })}
-          values={values.content}
+          value={values.content}
           placeholder="Content"
           required
         />
