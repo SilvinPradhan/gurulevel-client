@@ -3,7 +3,13 @@ import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import axios from "axios";
 import { Button, Image, Modal, Tooltip, List, Avatar } from "antd";
-import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EditOutlined,
+  UploadOutlined,
+  WarningFilled,
+} from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
 import { toast } from "react-toastify";
@@ -44,8 +50,9 @@ const CourseView = () => {
         values
       );
       setValues({ ...values, title: "", content: "", video: {} });
-      setVisible(false);
+      setProgress(0);
       setUploadButtonText("Upload a Video");
+      setVisible(false);
       setCourse(data);
       toast("Lesson added successfully!");
     } catch (err) {
@@ -106,6 +113,34 @@ const CourseView = () => {
     }
   };
 
+  const handlePublish = async (e, courseId) => {
+    try {
+      let answer = window.confirm(
+        "Are you sure you want to publish this course?"
+      );
+      if (!answer) return;
+      const { data } = await axios.put(`/api/course/publish/${courseId}`);
+      setCourse(data);
+      toast("Your course is live.");
+    } catch (err) {
+      toast("Your course could not be published.");
+    }
+  };
+  const handleUnPublish = async (e, courseId) => {
+    try {
+      let answer = window.confirm(
+        "Once you unpublish this course, it will no longer be live!"
+      );
+      if (!answer) return;
+      const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
+      setCourse(data);
+      toast("Your course has been unpublished!");
+    } catch (err) {
+      console.log("could not unpublish this course...", err);
+      toast("Course could not be unpublished.");
+    }
+  };
+
   return (
     <InstructorRoute>
       <div className="container-fluid pt-3">
@@ -156,9 +191,27 @@ const CourseView = () => {
                     }
                   />
                 </Tooltip>
-                <Tooltip title="Publish" className="px-2">
-                  <CheckOutlined className="h5 pointer text-danger mr-4" />
-                </Tooltip>
+
+                {course.lessons && course.lessons.length < 5 ? (
+                  <Tooltip title="Five lessons required to publish">
+                    <WarningFilled className="h5 text-danger" />
+                  </Tooltip>
+                ) : course.published ? (
+                  <Tooltip title="Revert">
+                    <CloseOutlined
+                      onClick={(e) => handleUnPublish(e, course._id)}
+                      className="h5 text-danger"
+                    />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Publish">
+                    <CheckOutlined
+                      onClick={(e) => handlePublish(e, course._id)}
+                      className="h5"
+                      style={{ color: "#4100d9" }}
+                    />
+                  </Tooltip>
+                )}
               </div>
             </div>
             <hr />

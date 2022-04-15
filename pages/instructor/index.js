@@ -29,7 +29,7 @@ const InstructorIndex = () => {
       });
     setCourses(data);
   };
-  const myStyle = { marginTop: "-15px", fontSize: "10px" };
+  const myStyle = { marginTop: "-15px", fontSize: "10px", color: "green" };
 
   return (
     <InstructorRoute>
@@ -68,13 +68,11 @@ const InstructorIndex = () => {
                 ) : course.published ? (
                   <p style={myStyle}>
                     <Tooltip title="Course is Live" color={"red"}>
-                      <Badge status="processing" color="#f50" text="#f50" />
+                      <Badge status="processing" color="#f50" text="Live" />
                     </Tooltip>
                   </p>
                 ) : (
-                  <h6 className="text-primary" style={myStyle}>
-                    Ready to Publish
-                  </h6>
+                  <h6 style={myStyle}>Ready to Publish</h6>
                 )}
               </div>
               <div
@@ -82,19 +80,19 @@ const InstructorIndex = () => {
                 className="col-md-3 mt-5 text-center"
               >
                 {course.published ? (
-                  <div>
+                  <Tooltip title="Published" placement="left">
                     <CheckCircleFilled
                       style={{ fontSize: "20px" }}
                       className="h5 pointer text-success"
                     />
-                  </div>
+                  </Tooltip>
                 ) : (
-                  <div>
+                  <Tooltip title="Unpublished" placement="left">
                     <CloseCircleFilled
                       style={{ cursor: "pointer", fontSize: "25px" }}
                       className="h5 text-warning"
                     />
-                  </div>
+                  </Tooltip>
                 )}
               </div>
             </div>
