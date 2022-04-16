@@ -1,6 +1,7 @@
-import { Card, Badge } from "antd";
+import { Card, Badge, Row, Col } from "antd";
 import React from "react";
 import Link from "next/link";
+import { currenyFormatter } from "../../utils/helpers";
 
 const { Meta } = Card;
 
@@ -19,6 +20,7 @@ const CourseCard = ({ course }) => {
               className="p-1"
             />
           }
+          // bordered={false}
         >
           <h2 className="font-weight-bold">{name}</h2>
           <p>
@@ -29,7 +31,15 @@ const CourseCard = ({ course }) => {
             style={{ backgroundColor: "#9543de" }}
             className="pb-2 mr-2"
           />
-          <h4 className="pt-2">{paid ? price : "Free"}</h4>
+          {/* <Meta title={} */}
+          <h4 className="pt-2">
+            {paid
+              ? currenyFormatter({
+                  amount: price,
+                  currency: "usd",
+                })
+              : "Free"}
+          </h4>
         </Card>
       </a>
     </Link>

@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
 import CourseCard from "../components/cards/CourseCard";
-const Index = () => {
-  const [courses, setCourses] = useState([]);
-  useEffect(() => {
-    const getCourses = async () => {
-      const { data } = await axios.get("/api/courses");
-      setCourses(data);
-    };
-    getCourses();
-  }, []);
+const Index = ({ courses }) => {
+  // const [courses, setCourses] = useState([]);
+
+  // useEffect(() => {
+  //   const getCourses = async () => {
+  //     const { data } = await axios.get("/api/courses");
+  //     setCourses(data);
+  //   };
+  //   getCourses();
+  // }, []);
   return (
     <>
       <div className="jumbotron navBorder">
@@ -42,5 +43,14 @@ const Index = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  const { data } = await axios.get(`${process.env.API}/courses`);
+  return {
+    props: {
+      courses: data,
+    },
+  };
+}
 
 export default Index;
