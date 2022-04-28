@@ -1,10 +1,27 @@
 import React from "react";
 import { currenyFormatter } from "../../utils/helpers";
-import { Badge, Modal } from "antd";
-import { CheckSquareOutlined, GlobalOutlined } from "@ant-design/icons";
+import { Badge, Button } from "antd";
+import {
+  CheckSquareOutlined,
+  GlobalOutlined,
+  LoadingOutlined,
+  SafetyOutlined,
+} from "@ant-design/icons";
 import ReactPlayer from "react-player";
 
-const CourseJumbotron = ({ course, modal, setModal, preview, setPreview }) => {
+const CourseJumbotron = ({
+  course,
+  modal,
+  setModal,
+  preview,
+  setPreview,
+  user,
+  loading,
+  handleFreeEnrollment,
+  handlePaidEnrollment,
+  enrolled,
+  setEnrolled,
+}) => {
   const {
     name,
     description,
@@ -90,6 +107,29 @@ const CourseJumbotron = ({ course, modal, setModal, preview, setPreview }) => {
             </div>
           ) : (
             <img src={image.Location} alt={name} className="img img-fluid" />
+          )}
+          {/** NEroll button */}
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <LoadingOutlined className="h1 text-danger" />
+            </div>
+          ) : (
+            <Button
+              className="mt-2 mb-2"
+              type={"danger"}
+              block
+              shape="round"
+              icon={<SafetyOutlined />}
+              size={"large"}
+              disabled={loading}
+              onClick={paid ? handlePaidEnrollment : handleFreeEnrollment}
+            >
+              {user
+                ? enrolled.status
+                  ? "Go to Course"
+                  : "Enroll"
+                : "Login to Enroll"}
+            </Button>
           )}
         </div>
       </div>

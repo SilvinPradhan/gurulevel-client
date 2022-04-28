@@ -1,4 +1,4 @@
-import { Card, Badge, Row, Col } from "antd";
+import { Card, Badge, Row, Col, Rate } from "antd";
 import React from "react";
 import Link from "next/link";
 import { currenyFormatter } from "../../utils/helpers";
@@ -23,6 +23,8 @@ const CourseCard = ({ course }) => {
           // bordered={false}
         >
           <h2 className="font-weight-bold">{name}</h2>
+          <Rate disabled defaultValue={3} />
+          <hr />
           <p>
             <span>Instructor:</span> {instructor.name}
           </p>
