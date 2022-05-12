@@ -41,9 +41,16 @@ const SingleCourse = ({ course }) => {
   const handleFreeEnrollment = async (e) => {
     e.preventDefault();
     try {
+      // check if user is logged in
+      if (!user) router.push("/login");
+      // check if enrolled already
+      if (enrolled.status)
+        return router.push(`/user/course/${enrolled.course.slug}`);
       setLoading(true);
       const { data } = await axios.post(`/api/free-enrollment/${course._id}`);
       toast(data.message);
+      setLoading(false);
+      router.push(`/user/course/${data.course.slug}`);
     } catch (err) {
       toast("Failed to enroll in this course.");
       setLoading(false);
